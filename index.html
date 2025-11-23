@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Kéo Thả Ghép Hình</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <button id="back-button" class="hidden">⬅️ QUAY LẠI</button>
+
+    <div id="feedback-message" class="feedback-slide-out hidden"></div>
+
+    <div id="game-container">
+      <div id="home-page" class="view">
+        <h1 class="title">Game Kéo Thả Ghép Hình</h1>
+        <div class="level-selection">
+          <p>Chọn Cấp Độ:</p>
+          <button class="level-button" data-level="easy">
+            EASY (Dễ - 2x2)
+          </button>
+          <button class="level-button" data-level="medium">
+            MEDIUM (Trung Bình - 5x5)
+          </button>
+          <button class="level-button" data-level="hard">
+            HARD (Khó - 5x6 Xoay Ngược)
+          </button>
+        </div>
+      </div>
+
+      <div id="image-selection-page" class="view hidden">
+        <h2 class="subtitle">
+          Chọn Ảnh Để Ghép (Cấp Độ <span id="current-level-display"></span>)
+        </h2>
+        <div id="image-selection-grid"></div>
+        <p class="note"></p>
+      </div>
+
+      <div id="game-play-page" class="view hidden">
+        <div class="game-area-wrapper">
+          <div id="left-column-area" class="area-section">
+            <div id="source-area">
+              <h2>Mảnh Ghép Lộn Xộn</h2>
+            </div>
+
+            <div id="hint-image-container" class="hidden">
+              <h3>
+                Ảnh Gợi Ý (Ở Chế Độ Này Bạn Phải Sắp Xếp Ảnh Bị Xoay Ngược)
+              </h3>
+              <img id="hint-image" src="" alt="Ảnh Gợi Ý" class="hint-image" />
+            </div>
+          </div>
+
+          <div id="target-area-container" class="area-section">
+            <h2>Khung Ảnh</h2>
+            <div id="target-area" class="target-grid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

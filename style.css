@@ -1,0 +1,229 @@
+:root {
+  /* Thiết lập kích thước ảnh nguồn */
+  --puzzle-size: 300px;
+  --gap-between-sections: 50px; /* Khoảng cách 5cm giữa 2 khu vực */
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  background-color: #f0f4f7;
+  color: #333;
+}
+
+/* --- CHUNG & CÔNG CỤ --- */
+.hidden {
+  display: none !important;
+}
+
+#game-container {
+  max-width: 1200px;
+  width: 100%;
+  padding: 20px;
+}
+
+.title {
+  color: #007bff;
+  margin-bottom: 40px;
+  font-size: 2.8em;
+  text-align: center;
+}
+
+.level-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 25px;
+  font-size: 1.2em;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  margin: 10px;
+}
+
+.level-button:hover {
+  background-color: #45a049;
+}
+
+#back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #ff9800;
+  color: white;
+  padding: 10px 15px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+/* --- TRẠNG THÁI 2: CHỌN ẢNH --- */
+#image-selection-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.image-thumbnail {
+  width: 150px;
+  height: 150px;
+  border: 5px solid #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+  background-size: cover;
+  background-position: center;
+}
+
+/* --- TRẠNG THÁI 3: CHƠI GAME --- */
+.game-area-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  gap: var(--gap-between-sections); /* 50px */
+}
+
+.area-section {
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Khu vực cột trái (Source Area + Hint Area) */
+#left-column-area {
+  display: flex;
+  flex-direction: column; /* Xếp Khu vực 1 lên trên, Khu vực 3 xuống dưới */
+  min-width: 350px;
+}
+
+#source-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 20px; /* Khoảng cách giữa Khu vực 1 và Khu vực 3 (Hint) */
+}
+
+#target-area-container {
+  flex-grow: 1;
+  max-width: calc(var(--puzzle-size) + 40px);
+}
+
+/* Hint Image (Khu vực 3) */
+#hint-image-container {
+  padding-top: 20px;
+  border-top: 1px dashed #ccc;
+  margin-top: auto;
+}
+
+.hint-image {
+  width: 150px;
+  height: 150px;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+}
+
+/* --- KHUNG ĐÍCH (GRID) --- */
+#target-area {
+  width: var(--puzzle-size);
+  height: var(--puzzle-size);
+  border: 3px dashed #b3d9ff;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #e6f2ff;
+}
+
+#target-area.grid-2x2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+#target-area.grid-5x5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+}
+
+/* HARD MODE: 5x6 */
+#target-area.grid-5x6 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+}
+
+.puzzle-slot {
+  border: 1px solid #cce0ff;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- MẢNH GHÉP CHUNG --- */
+.puzzle-piece {
+  background-size: 300px 300px;
+  cursor: grab;
+  border: 1px solid #777;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s, transform 0.3s;
+  position: relative;
+}
+
+.puzzle-piece.dragging {
+  opacity: 0.6;
+  border: 2px dashed #007bff;
+  z-index: 99;
+}
+
+/* Hiệu ứng xoay ngược 180 độ chỉ cho mảnh ghép HARD */
+.puzzle-piece.hard-rotated {
+  transform: rotate(180deg);
+}
+
+/* --- THÔNG BÁO PHẢN HỒI (SLIDE EFFECT BẮT BUỘC) --- */
+#feedback-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 25px 0;
+  text-align: center;
+  font-size: 2.2em;
+  font-weight: bold;
+  color: white;
+  z-index: 1000;
+  transform: translateY(-100%); /* Bắt đầu ở ngoài màn hình */
+  transition: transform 0.5s ease-out; /* HIỆU ỨNG TRƯỢT XUỐNG BẮT BUỘC */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.feedback-correct {
+  background-color: #28a745;
+}
+
+.feedback-incorrect {
+  background-color: #dc3545;
+}
+
+.feedback-slide-in {
+  transform: translateY(0); /* Trượt vào màn hình */
+}
+
+.note {
+  margin-top: 30px;
+  font-style: italic;
+  color: #666;
+  text-align: center;
+  width: 100%;
+}
